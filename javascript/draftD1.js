@@ -71,7 +71,7 @@ let expectedOutput = 63;
 
 let contents;
 try {
-   contents = fs.readFileSync("./input.txt", "utf8");
+   contents = fs.readFileSync("./inputD1.txt", "utf8");
 } catch (err) {
    console.log(`this error was encountered -> ${err}`);
 }

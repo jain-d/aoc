@@ -8,7 +8,7 @@ const reset = '\x1b[0m';
 
 let contents;
 try {
-   contents = fs.readFileSync("./newInput", "utf8");
+   contents = fs.readFileSync("./inputD1.txt", "utf8");
 } catch(er) {
    console.log(`this error was encountered-> ${er}`)
 }
@@ -17,7 +17,6 @@ let contentsArray = contents.trim().split("\n");
 
 
 // partOne
-/*
 let summation = 0;
 for (let value of contentsArray) {
    let firstCharacter = true;
@@ -42,8 +41,6 @@ for (let value of contentsArray) {
    calibrationIns = calibrationIns + lastCharacter;
    summation += calibrationIns;
 } 
-console.log(summation);
-*/
 
 
 
@@ -207,4 +204,5 @@ function increaseSummation(sample, alphaIndexes, numericIndexes) {
    visits += 1;
    console.log(`${visits}. for ${yellow}${sample}${reset},\n\tcalibrationValue: ${blue}${calibrationV}${reset} & value of finalSummation ${green}${finalSummation}${reset}`);
 }
+console.log(summation);
 console.log(finalSummation);
