@@ -8,7 +8,7 @@ const reset = '\x1b[0m';
 
 let contents;
 try {
-   contents = fs.readFileSync("./inputD1.txt", "utf8");
+   contents = fs.readFileSync("../input/inputD1.txt", "utf8");
 } catch(er) {
    console.log(`this error was encountered-> ${er}`)
 }
