@@ -12,7 +12,7 @@ try {
 } catch(er) {
    console.log(`this error was encountered-> ${er}`)
 }
-let contentsArray = contents.trim().split("\n");
+let contentsArray = contents.trim().split(/\r?\n/);
 
 
 
