@@ -7,8 +7,6 @@ const blue = '\x1b[34m';
 const reset = '\x1b[0m';
 const passed = '\x1b[32mPASSED\x1b[0m'; 
 const failed = '\x1b[31mFAILED\x1b[0m';
-let results;
-
 
 const objWords = [
    {
@@ -67,16 +65,16 @@ const objWords = [
 ];
 let samples = ["two1nine", "eightwothree", "abcone2threexyz", "xtwone3four", "4nineeightseven2", "zoneight234", "7pqrstsixteen", "1abc2", "treb7uchet", "pqr3stu8vwx", "a1b2c3d4e5f", "sixthree84three", "twokdkcbhtqxfc87rkgctwo"];
 let sample = "fivednzg85eightseveneightfive";
-let expectedOutput = 63;
 
 let contents;
 try {
-   contents = fs.readFileSync("./inputD1.txt", "utf8");
+   contents = fs.readFileSync("../input/inputD1.txt", "utf8");
 } catch (err) {
    console.log(`this error was encountered -> ${err}`);
 }
 let contentsArray = contents.trim().split("\n");
 
+/*
 let summation = 0;
 function searchAlphabets(entry, alphaIndexes) {
    console.log('inside of searchAlphabets function');
@@ -104,9 +102,6 @@ function searchNumerals(entry, numericIndexes) {
    }
    numericIndexes.sort(function(a, b){return a - b});
 }
-
-
-
 
 function parseCalibrationValue(entry, alphaIndexes, numericIndexes) {
    let tens = 10;
@@ -189,10 +184,10 @@ function parseCalibrationValue(entry, alphaIndexes, numericIndexes) {
       }
    }
 }
+*/
 
 
-
-
+/*  
 //for (let sample of contentsArray) {
    console.log(`for ${yellow}${sample}${reset}`);
    let alphaIndexes = [];
@@ -206,7 +201,7 @@ function parseCalibrationValue(entry, alphaIndexes, numericIndexes) {
 //}
 console.log(summation);
 //console.log(`\n\n\tExpected Output: ${expectedOutput}\n\tCalculated Sum: ${summation}\n\n\t${results = summation === expectedOutput ? passed : failed}\n\n`);
-/*
+
 let entires = 0;
 let firstAlphaIndex = 100;
 let alphaTensValue = 0;
@@ -238,4 +233,85 @@ console.log(`\nthis is the tens Value ${red}${tensValue}${reset}\n`);
 //console.log(`\n\tfor ${yellow}${sample}${reset} we have ${green}${entires}${reset} entires.`);
 console.log(`\nfor the entry ${yellow}${sample}${reset}`);
 console.log(`\n\tnumeralIndex at ${green}${firstNumeralIndex}${reset} and alphaIndex at ${green}${firstAlphaIndex}${reset}`);
-*/
+ */
+
+// Something is wrong with the logic used for solving Day1Part2, for it seems correct in the sense that for arbitrary values, it would give the right output but the answer it gives has a variance of 20 from the correct answer. So reWriting the logic
+
+
+let sampleValues = ["one2three", "one2three4", "1two3four5", "1two3four5six", "oneight", "oneight4", "45", "nineeight"];
+let sampleValue =  "lbseight3two";
+let summation = 0;
+
+function findAlphabets(value, alIndex) {
+   for(let word of objWords) {
+      if (value.includes(word.name)) {
+         alIndex.push({name:word.name, value: word.value, index:value.indexOf(word.name)});
+      }
+   }
+   alIndex.sort(function(a, b){return a.index - b.index;});
+}
+
+function findNumerals(value, nuIndex) {
+   for (let word of objWords) {
+      if (value.includes(word.value)) {
+         nuIndex.push(value.indexOf(word.value));
+      }
+   }
+   nuIndex.sort((a, b) => {return a - b});
+}
+
+function findCalibrationValue(value, alphabets, numerals) {
+   let firstCharacter = 0;
+   let lastCharacter = 0;
+   if (alphabets.length > 0 && numerals.length > 0) {
+
+      // finding firstCharacter or tens value
+      if (alphabets[0].index > numerals[0]) {
+         firstCharacter = +(value[numerals[0]]);
+      }
+      else {
+         firstCharacter = +(alphabets[0].value);
+      }
+
+      // finding lastCharacter or zeros value
+      if (alphabets.at(-1).index < numerals.at(-1)) {
+         lastCharacter = +(value[numerals.at(-1)]);
+      } else {
+         lastCharacter = +(alphabets.at(-1).value);
+      }
+   } else if (alphabets.length === 0) {
+      if (numerals.length === 1) {
+         firstCharacter = +(value[numerals[0]]);
+         lastCharacter = firstCharacter;
+      } else {
+         firstCharacter = +(value[numerals[0]]);
+         lastCharacter = +(value[numerals.at(-1)]);
+      }
+   } else {
+      if (alphabets.length === 1) {
+         firstCharacter = +(alphabets[0].value);
+         lastCharacter = firstCharacter;
+      } else {
+         if ((alphabets[0].index + (objWords[alphabets[0].value - 1].length - 1)) < alphabets.at(-1).index) {
+            firstCharacter = +(alphabets[0].value);
+            lastCharacter = +(alphabets.at(-1).value);
+         } else {
+            firstCharacter = +(alphabets[0].value);
+            lastCharacter = firstCharacter;
+            console.log(`${alphabets[0].value}`);
+         }
+      }
+   }
+   return ((firstCharacter * 10) + lastCharacter);
+}
+
+for (let sampleValue of sampleValues) {
+   console.log(`\nfor ${yellow}${sampleValue}${reset}`);
+   let alIndex = [];
+   let nuIndex = [];
+   findAlphabets(sampleValue, alIndex);
+   findNumerals(sampleValue, nuIndex);
+   summation += findCalibrationValue(sampleValue, alIndex, nuIndex);
+   console.log(`the calibrationValue is ${blue}${findCalibrationValue(sampleValue, alIndex, nuIndex)}${reset}`);
+}
+console.log(summation);
