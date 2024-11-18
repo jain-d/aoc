@@ -2,8 +2,9 @@ var fs = require("node:fs");
 // drafting solution for part 2
 const red = '\x1b[31m';
 const green = '\x1b[32m';
-const yellow = '\x1b[33m';
-const blue = '\x1b[34m';
+const yellow = '\u001b[38;5;11m';
+const blue = '\u001b[38;5;33m';
+const orange = '\u001b[38;5;208m';
 const reset = '\x1b[0m';
 const passed = '\x1b[32mPASSED\x1b[0m'; 
 const failed = '\x1b[31mFAILED\x1b[0m';
@@ -63,7 +64,7 @@ const objWords = [
 
    }
 ];
-let samples = ["two1nine", "eightwothree", "abcone2threexyz", "xtwone3four", "4nineeightseven2", "zoneight234", "7pqrstsixteen", "1abc2", "treb7uchet", "pqr3stu8vwx", "a1b2c3d4e5f", "sixthree84three", "twokdkcbhtqxfc87rkgctwo"];
+let samples = ["two1nine", "eightwothree", "abcone2threexyz", "xtwone3four", "4nineeightseven2", "zoneight234", "7pqrstsixteen"];
 let sample = "fivednzg85eightseveneightfive";
 
 let contents;
@@ -239,13 +240,18 @@ console.log(`\n\tnumeralIndex at ${green}${firstNumeralIndex}${reset} and alphaI
 
 
 let sampleValues = ["one2three", "one2three4", "1two3four5", "1two3four5six", "oneight", "oneight4", "45", "nineeight"];
-let sampleValue =  "lbseight3two";
+let sampleValue =  "xxeight4eightsix9sixyy";
 let summation = 0;
 
 function findAlphabets(value, alIndex) {
    for(let word of objWords) {
       if (value.includes(word.name)) {
-         alIndex.push({name:word.name, value: word.value, index:value.indexOf(word.name)});
+         if (value.indexOf(word.name) === value.lastIndexOf(word.name)) {
+            alIndex.push({name:word.name, value: word.value, index:value.indexOf(word.name)});
+         } else {
+            alIndex.push({name:word.name, value: word.value, index:value.indexOf(word.name)});
+            alIndex.push({name:word.name, value: word.value, index:value.lastIndexOf(word.name)});
+         }
       }
    }
    alIndex.sort(function(a, b){return a.index - b.index;});
@@ -298,20 +304,19 @@ function findCalibrationValue(value, alphabets, numerals) {
          } else {
             firstCharacter = +(alphabets[0].value);
             lastCharacter = firstCharacter;
-            console.log(`${alphabets[0].value}`);
          }
       }
    }
    return ((firstCharacter * 10) + lastCharacter);
 }
 
-for (let sampleValue of sampleValues) {
-   console.log(`\nfor ${yellow}${sampleValue}${reset}`);
+for (let sampleValue of contentsArray) {
+   //console.log(`\nfor ${yellow}${sampleValue}${reset}`);
    let alIndex = [];
    let nuIndex = [];
    findAlphabets(sampleValue, alIndex);
    findNumerals(sampleValue, nuIndex);
    summation += findCalibrationValue(sampleValue, alIndex, nuIndex);
-   console.log(`the calibrationValue is ${blue}${findCalibrationValue(sampleValue, alIndex, nuIndex)}${reset}`);
+   //console.log(`the calibrationValue is ${blue}${findCalibrationValue(sampleValue, alIndex, nuIndex)}${reset}`);
 }
-console.log(summation);
+console.log(`SUMMATION= ${orange} ${summation}${reset}`);
