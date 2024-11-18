@@ -121,6 +121,9 @@ function searchNumerals(entry, numericIndexes) {
    for (let focus of entry) {
       if ((+(focus) || (+(focus) === 0)) && !numericIndexes.includes(entry.search(focus))) {
          numericIndexes.push(entry.search(focus));
+         if (entry.indexOf(focus) !== entry.lastIndexOf(focus)) {
+            numericIndexes.push(entry.lastIndexOf(focus));
+         }
       }
    }
    numericIndexes.sort(function(a, b){return a - b});
@@ -202,7 +205,7 @@ function increaseSummation(sample, alphaIndexes, numericIndexes) {
    calibrationV += parseCalibrationValue(sample, alphaIndexes, numericIndexes);
    finalSummation += calibrationV;
    visits += 1;
-   console.log(`${visits}. for ${yellow}${sample}${reset},\n\tcalibrationValue: ${blue}${calibrationV}${reset} & value of finalSummation ${green}${finalSummation}${reset}`);
+   //console.log(`${visits}. for ${yellow}${sample}${reset},\n\tcalibrationValue: ${blue}${calibrationV}${reset} & value of finalSummation ${green}${finalSummation}${reset}`);
 }
 console.log(summation);
 console.log(finalSummation);

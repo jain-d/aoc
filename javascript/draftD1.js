@@ -260,7 +260,12 @@ function findAlphabets(value, alIndex) {
 function findNumerals(value, nuIndex) {
    for (let word of objWords) {
       if (value.includes(word.value)) {
-         nuIndex.push(value.indexOf(word.value));
+         if (value.indexOf(word.value) === value.lastIndexOf(word.value)) {
+            nuIndex.push(value.indexOf(word.value));
+         } else {
+            nuIndex.push(value.indexOf(word.value));
+            nuIndex.push(value.lastIndexOf(word.value));
+         }
       }
    }
    nuIndex.sort((a, b) => {return a - b});
@@ -298,25 +303,29 @@ function findCalibrationValue(value, alphabets, numerals) {
          firstCharacter = +(alphabets[0].value);
          lastCharacter = firstCharacter;
       } else {
-         if ((alphabets[0].index + (objWords[alphabets[0].value - 1].length - 1)) < alphabets.at(-1).index) {
+         //if ((alphabets[0].index + (objWords[alphabets[0].value - 1].length - 1)) < alphabets.at(-1).index) {
             firstCharacter = +(alphabets[0].value);
             lastCharacter = +(alphabets.at(-1).value);
-         } else {
+         /*} else {
             firstCharacter = +(alphabets[0].value);
             lastCharacter = firstCharacter;
-         }
+         }*/
       }
    }
    return ((firstCharacter * 10) + lastCharacter);
 }
-
+let specialInput = ["twone", "sevenine", "nineight", "threeight"];
+sampleValue = "26sfzqpfgfivetwo56";
 for (let sampleValue of contentsArray) {
    //console.log(`\nfor ${yellow}${sampleValue}${reset}`);
    let alIndex = [];
    let nuIndex = [];
+   let cV = 0;
    findAlphabets(sampleValue, alIndex);
    findNumerals(sampleValue, nuIndex);
-   summation += findCalibrationValue(sampleValue, alIndex, nuIndex);
+   cV = findCalibrationValue(sampleValue, alIndex, nuIndex);
+   summation += cV;
    //console.log(`the calibrationValue is ${blue}${findCalibrationValue(sampleValue, alIndex, nuIndex)}${reset}`);
+   console.log(`${sampleValue} ${cV}`);
 }
 console.log(`SUMMATION= ${orange} ${summation}${reset}`);
