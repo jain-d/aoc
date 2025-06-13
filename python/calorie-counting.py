@@ -1,8 +1,8 @@
 from pyutils.colors import Colors
 
-
 # Part 1
-most_calories = 0
+total_calories_per_elf: list = []
+
 with open("../input/day1.txt", "r") as file:
     file_content = file.read()
     global elves
@@ -10,18 +10,14 @@ with open("../input/day1.txt", "r") as file:
 
 for elf in elves:
     entry_list = elf.splitlines()
-    if len(entry_list) > 1:
-        total_calories = 0
-        for entry in entry_list:
-            total_calories += int(entry.strip())
-        most_calories = total_calories if total_calories > most_calories else most_calories
+    total_calories = 0
+    for entry in entry_list:
+        total_calories += int(entry.strip())
+    total_calories_per_elf.append(total_calories)
 
-    else:
-        if (calories := int(entry_list[0])) > most_calories:
-            most_calories = calories
+total_calories_per_elf.sort()
 
-print(f"\n{Colors.ORANGE}{most_calories}")
-
+print(f"\n{Colors.ORANGE}{total_calories_per_elf[-1]}")
 
 # Part 2
-
+print(f"\n{Colors.ORANGE}{sum(total_calories_per_elf[-3:])}")
