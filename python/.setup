@@ -10,16 +10,14 @@ else
     read day
 fi
 
-session=""
-
-if [[ -z "$session" ]]; then
+if [[ -z "$AOC_SESSION" ]]; then
     echo -e "\nadd \033[1;31msession cookie\033[0m"
     exit 1
 fi
 
 url="https://adventofcode.com/$year/day/$day/input"
 
-data=$(curl --cookie "session=$session" $url)
+data=$(curl --cookie "session=$AOC_SESSION" $url)
 
 if [[ "${#data}" -lt 200 ]]; then
     echo "Data not loaded: $data"
