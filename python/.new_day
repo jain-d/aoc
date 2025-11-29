@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+if [[ "$#" -ge 1 ]]; then
+    day=$1
+else
+    echo "Which day? "
+    read day
+fi
+
+session="53616c7465645f5fffe1224825821e42b12a64a3c1aab4be4dac40e153607f9cecf456827e696af464f1438a10b118810f10bad7a29910607170c9e39b9bc276"
+url="https://adventofcode.com/$(date +%Y)/day/$day/input"
+
+data=$(curl --cookie "session=$session" $url)
+
+if [[ "${#data}" -lt 200 ]]; then
+    echo "Data not loaded: $data"
+    exit 1
+fi
+
+mkdir -p ../input
+
+echo "$data" > ../input/day$1.txt
+
+if [[ "$2" == "file" ]]; then
+    cp ./.dayX.py ./day$1.py
+    sed -i "s/dayX/day$1/" day$1.py
+fi
