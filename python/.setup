@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+if [[ "$#" -ge 2 ]]; then
+    year=$1
+    day=$2
+else
+    echo "Year?"
+    read year
+    echo "Day?"
+    read day
+fi
+
+session=""
+
+if [[ -z "$session" ]]; then
+    echo -e "\nadd \033[1;31msession cookie\033[0m"
+    exit 1
+fi
+
+url="https://adventofcode.com/$year/day/$day/input"
+
+data=$(curl --cookie "session=$session" $url)
+
+if [[ "${#data}" -lt 200 ]]; then
+    echo "Data not loaded: $data"
+    exit 1
+fi
+
+mkdir -p ../input
+
+echo "$data" > ../input/day$day.txt
+
+if [[ "$3" ]]; then
+    cp ./.dayX.py ./day$day.py
+    sed -i "s/dayX/day$day/" day$day.py
+fi
