@@ -23,3 +23,4 @@ echo "$data" > ../input/day$1.txt
 if [[ "$2" == "file" ]]; then
     cp ./.dayX.py ./day$1.py
     sed -i "s/dayX/day$1/" day$1.py
+fi
